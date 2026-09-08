@@ -1,0 +1,37 @@
+{
+    "name": "opmvpc/formes-26",
+    "description": "Atelier POO : dessiner des formes geometriques et les exporter en SVG.",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "meyfa/php-svg": "^0.16"
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.0"
+    },
+    "suggest": {
+        "ext-gd": "Necessaire uniquement pour le bonus JpgRenderer."
+    },
+    "autoload": {
+        "psr-4": {
+            "Shapes\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "scripts": {
+        "test": "pest",
+        "test:etape-1": "pest --group=etape-1",
+        "test:etape-2": "pest --group=etape-2",
+        "test:etape-3": "pest --group=etape-3",
+        "test:etape-4": "pest --group=etape-4",
+        "test:bonus": "pest --group=bonus"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
