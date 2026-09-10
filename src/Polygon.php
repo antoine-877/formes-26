@@ -11,22 +11,19 @@ namespace Shapes;
  * Moins de trois sommets, ou un élément qui n'est pas un `Point` :
  * `\InvalidArgumentException`.
  *
+ * Les sommets sont exposés en `public readonly array $points` : on lit
+ * `$polygon->points`, pas de `points()`. `pointCount()` reste une méthode.
+ *
  * Le type `array` de PHP ne dit pas ce qu'il contient : c'est à vous de
  * vérifier, avec `instanceof`.
  */
 final class Polygon extends Shape
 {
-    /** @var list<Point> */
-    private readonly array $points;
+    /** @var list<Point> Les sommets, dans l'ordre. */
+    public readonly array $points;
 
     /** @param list<Point> $points */
     public function __construct(array $points, string $color = self::DEFAULT_COLOR)
-    {
-        throw new \LogicException('À implémenter');
-    }
-
-    /** @return list<Point> */
-    public function points(): array
     {
         throw new \LogicException('À implémenter');
     }

@@ -44,7 +44,7 @@ $renderer->save($path);
 
 printf("Étoile écrite dans %s (%d formes, aire totale : %.0f px²).%s",
     $path,
-    count($canvas->shapes()),
+    count($canvas->shapes),
     $canvas->totalArea(),
     PHP_EOL,
 );

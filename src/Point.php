@@ -9,7 +9,8 @@ namespace Shapes;
  *
  * Un point est une valeur, pas un objet qui vit sa vie : une fois construit,
  * il ne change plus. Rendez la classe `readonly` et déclarez `x` et `y`
- * en promotion de constructeur (`public float $x`).
+ * en promotion de constructeur (`public float $x`). Pas de `x()` ni de `y()` :
+ * une propriété `readonly` se lit directement, `$point->x`.
  *
  * Indice : `final readonly class Point implements \Stringable`.
  */

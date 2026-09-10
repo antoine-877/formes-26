@@ -14,12 +14,18 @@ it('retient son origine, sa largeur et sa hauteur', function (): void {
     $origin = new Point(5, 8);
     $rectangle = new Rectangle($origin, 250, 400, '#ff0000');
 
-    expect($rectangle->origin())->toBe($origin)
-        ->and($rectangle->origin()->x)->toBe(5.0)
-        ->and($rectangle->width())->toBe(250.0)
-        ->and($rectangle->height())->toBe(400.0)
-        ->and($rectangle->color())->toBe('#FF0000');
+    expect($rectangle->origin)->toBe($origin)
+        ->and($rectangle->origin->x)->toBe(5.0)
+        ->and($rectangle->width)->toBe(250.0)
+        ->and($rectangle->height)->toBe(400.0)
+        ->and($rectangle->color)->toBe('#FF0000');
 })->group('etape-2');
+
+it('ne change pas de dimensions : elles sont readonly', function (): void {
+    $rectangle = new Rectangle(new Point(0, 0), 10, 10);
+
+    $rectangle->width = 20;
+})->throws(Error::class)->group('etape-2');
 
 it('calcule son aire et son périmètre', function (): void {
     $rectangle = new Rectangle(new Point(0, 0), 4, 5);

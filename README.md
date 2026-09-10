@@ -16,7 +16,7 @@ eux, sont **complets**. Votre travail : rendre les tests verts, étape par étap
 git clone https://github.com/<votre-compte>/formes-26.git
 cd formes-26
 
-# 2. Installez les dépendances (PHP 8.3 minimum)
+# 2. Installez les dépendances (PHP 8.4 minimum)
 composer install
 
 # 3. Lancez les tests : tout est rouge, c'est normal
@@ -26,9 +26,9 @@ composer test
 Puis, étape par étape :
 
 ```bash
-composer test:etape-1   # 12 tests
-composer test:etape-2   # 23 tests
-composer test:etape-3   # 17 tests
+composer test:etape-1   # 13 tests
+composer test:etape-2   # 26 tests
+composer test:etape-3   # 18 tests
 composer test:etape-4   # 10 tests
 composer test:bonus     #  3 tests, ignorés si l'extension GD manque
 ```
@@ -59,6 +59,13 @@ classe `readonly` et déclarez `x` et `y` en promotion de constructeur.
 majuscules). Sa longueur ? `Point` sait déjà calculer une distance : servez-vous-en
 au lieu de recopier la formule.
 
+> Règle de l'atelier, valable jusqu'au bout : **aucun getter trivial, aucun
+> setter**. Ce qui est fixé à la création est une propriété `public readonly`
+> (`$line->start`, `$circle->radius`, `$canvas->width`) ; ce qui se calcule reste
+> une méthode (`length()`, `area()`, `perimeter()`, `totalArea()`). Une propriété
+> `readonly` se valide dans le corps du constructeur : rayon négatif,
+> `InvalidArgumentException`.
+
 ### Étape 2 — `Shape`, `Circle`, `Rectangle`
 
 Un cercle et un rectangle ont deux choses en commun : une couleur, et le fait
@@ -66,7 +73,10 @@ d'avoir une aire. C'est exactement ce que contient la classe **abstraite**
 `Shape`. `area()` y est déclarée sans corps : chaque enfant est obligé de
 l'écrire.
 
-Les constructeurs des enfants appellent `parent::__construct($color)`.
+Les constructeurs des enfants appellent `parent::__construct($color)`. La couleur
+est `public readonly` dans `Shape`, mais elle doit être validée **et** mise en
+majuscules avant d'être rangée : déclarez-la à part et affectez-la dans le corps
+du constructeur, une propriété `readonly` ne s'écrit qu'une fois.
 
 Puis **revenez sur `Line`** : elle aussi est une forme. Faites-la hériter de
 `Shape`, supprimez sa couleur en double, et donnez-lui une `area()` qui rend
@@ -79,6 +89,8 @@ l'étape 1 doivent rester verts.
 
 `Canvas` est la feuille de dessin : une taille, un fond, et une liste de formes.
 Il **n'hérite pas** de `Shape` : un canvas n'est pas une forme, il en contient.
+Sa liste est `public private(set)` : on la lit de l'extérieur (`$canvas->shapes`),
+seul `add()` la fait grandir.
 
 `totalArea()` additionne les aires de toutes les formes. Écrivez-la sans un seul
 `if` ni `instanceof` : c'est le polymorphisme qui fait le travail.

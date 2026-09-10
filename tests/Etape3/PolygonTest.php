@@ -16,11 +16,11 @@ it('retient ses sommets dans l\'ordre', function (): void {
     $points = [new Point(0, 0), new Point(0, 10), new Point(10, 10), new Point(10, 0)];
     $polygon = new Polygon($points, '#00ff00');
 
-    expect($polygon->points())->toHaveCount(4)
+    expect($polygon->points)->toHaveCount(4)
         ->and($polygon->pointCount())->toBe(4)
-        ->and($polygon->points()[0])->toBe($points[0])
-        ->and($polygon->points()[3])->toBe($points[3])
-        ->and($polygon->color())->toBe('#00FF00');
+        ->and($polygon->points[0])->toBe($points[0])
+        ->and($polygon->points[3])->toBe($points[3])
+        ->and($polygon->color)->toBe('#00FF00');
 })->group('etape-3');
 
 it('accepte un triangle', function (): void {

@@ -11,19 +11,19 @@ use Shapes\Rectangle;
 it('a une taille et un fond blanc par défaut', function (): void {
     $canvas = new Canvas(500, 300);
 
-    expect($canvas->width())->toBe(500.0)
-        ->and($canvas->height())->toBe(300.0)
-        ->and($canvas->background())->toBe('#FFFFFF');
+    expect($canvas->width)->toBe(500.0)
+        ->and($canvas->height)->toBe(300.0)
+        ->and($canvas->background)->toBe('#FFFFFF');
 })->group('etape-3');
 
 it('accepte un fond personnalisé', function (): void {
-    expect((new Canvas(10, 10, '#00ffff'))->background())->toBe('#00FFFF');
+    expect((new Canvas(10, 10, '#00ffff'))->background)->toBe('#00FFFF');
 })->group('etape-3');
 
 it('naît vide', function (): void {
     $canvas = new Canvas(100, 100);
 
-    expect($canvas->shapes())->toBeArray()->toBeEmpty()
+    expect($canvas->shapes)->toBeArray()->toBeEmpty()
         ->and($canvas->isEmpty())->toBeTrue();
 })->group('etape-3');
 
@@ -32,13 +32,19 @@ it('accumule les formes qu\'on lui ajoute', function (): void {
     $rectangle = new Rectangle(new Point(0, 0), 10, 10);
 
     $canvas->add($rectangle);
-    expect($canvas->shapes())->toHaveCount(1)
-        ->and($canvas->shapes()[0])->toBe($rectangle)
+    expect($canvas->shapes)->toHaveCount(1)
+        ->and($canvas->shapes[0])->toBe($rectangle)
         ->and($canvas->isEmpty())->toBeFalse();
 
     $canvas->add(new Circle(new Point(5, 5), 3));
-    expect($canvas->shapes())->toHaveCount(2);
+    expect($canvas->shapes)->toHaveCount(2);
 })->group('etape-3');
+
+it('ne laisse personne remplacer sa liste de formes : private(set)', function (): void {
+    $canvas = new Canvas(100, 100);
+
+    $canvas->shapes = [];
+})->throws(Error::class)->group('etape-3');
 
 it('refuse ce qui n\'est pas une forme', function (): void {
     $canvas = new Canvas(100, 100);

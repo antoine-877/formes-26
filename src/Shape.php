@@ -11,7 +11,13 @@ namespace Shapes;
  * Une forme sans forme, ça n'existe pas.
  *
  * Le constructeur reçoit la couleur (`#RRGGBB`), la valide et la met en
- * majuscules. Une couleur invalide lève `\InvalidArgumentException`.
+ * majuscules avant de la ranger dans `public readonly string $color`.
+ * Une couleur invalide lève `\InvalidArgumentException`. Pas de `color()` :
+ * on lit `$shape->color`.
+ *
+ * Attention : une propriété `readonly` ne s'écrit qu'une fois. Ne la promouvez
+ * pas dans la signature si vous devez la transformer : déclarez-la à part et
+ * affectez-la dans le corps, après validation.
  *
  * Indice pour la validation : `preg_match('/^#[0-9A-Fa-f]{6}$/', $color)`.
  */
@@ -19,10 +25,10 @@ abstract class Shape
 {
     public const string DEFAULT_COLOR = '#000000';
 
-    // TODO : le constructeur, avec `protected string $color = self::DEFAULT_COLOR`
-    // en promotion, la validation, et la normalisation en majuscules.
+    /** TODO : `public readonly string $color;` déclarée ici, remplie par le constructeur. */
 
-    public function color(): string
+    // TODO : la validation, puis `$this->color = strtoupper($color);`.
+    public function __construct(string $color = self::DEFAULT_COLOR)
     {
         throw new \LogicException('À implémenter');
     }

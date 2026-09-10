@@ -9,23 +9,14 @@ namespace Shapes;
  *
  * Constructeur attendu :
  * `new Rectangle(Point $origin, float $width, float $height, string $color = '#000000')`.
+ * Doit exposer `public readonly Point $origin`, `public readonly float $width`
+ * et `public readonly float $height` (promotion de constructeur).
  * Une dimension nulle ou négative lève `\InvalidArgumentException`.
  */
 final class Rectangle extends Shape
 {
-    // TODO : le constructeur.
-
-    public function origin(): Point
-    {
-        throw new \LogicException('À implémenter');
-    }
-
-    public function width(): float
-    {
-        throw new \LogicException('À implémenter');
-    }
-
-    public function height(): float
+    // TODO : promouvoir les trois propriétés en `public readonly`, valider les dimensions.
+    public function __construct(Point $origin, float $width, float $height, string $color = self::DEFAULT_COLOR)
     {
         throw new \LogicException('À implémenter');
     }

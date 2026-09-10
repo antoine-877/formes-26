@@ -32,9 +32,15 @@ it('est le parent de toutes les formes, ligne comprise', function (): void {
 })->group('etape-2');
 
 it('donne la même couleur par défaut à toutes les formes', function (): void {
-    expect((new Circle(new Point(0, 0), 5))->color())->toBe('#000000')
-        ->and((new Rectangle(new Point(0, 0), 5, 5))->color())->toBe('#000000');
+    expect((new Circle(new Point(0, 0), 5))->color)->toBe('#000000')
+        ->and((new Rectangle(new Point(0, 0), 5, 5))->color)->toBe('#000000');
 })->group('etape-2');
+
+it('ne change pas de couleur : elle est readonly', function (): void {
+    $circle = new Circle(new Point(0, 0), 5);
+
+    $circle->color = '#FF0000';
+})->throws(Error::class)->group('etape-2');
 
 it('refuse une couleur qui n\'est pas un hexadécimal à six chiffres', function (string $color): void {
     new Circle(new Point(0, 0), 5, $color);
