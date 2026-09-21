@@ -27,10 +27,12 @@ abstract class Shape
 
     /** TODO : `public readonly string $color;` déclarée ici, remplie par le constructeur. */
 
+    public readonly string $color;
+
     // TODO : la validation, puis `$this->color = strtoupper($color);`.
     public function __construct(string $color = self::DEFAULT_COLOR)
     {
-        throw new \LogicException('À implémenter');
+        $this->color=strtoupper($color);
     }
 
     /**

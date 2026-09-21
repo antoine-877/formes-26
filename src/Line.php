@@ -13,6 +13,7 @@ namespace Shapes;
  * La couleur est normalisée en majuscules (`#ff0000` devient `#FF0000`) et se
  * lit `$line->color`.
  *
+ * 
  * ÉTAPE 2 — Vous reviendrez ici : `Line` devra hériter de `Shape`, perdre sa
  * propre couleur au profit de celle du parent, et implémenter `area()`.
  */
@@ -20,16 +21,23 @@ final class Line
 {
     // TODO étape 1 : promouvoir `$start` et `$end` en `public readonly`, et garder
     //   la couleur dans une `public readonly string $color` validée et en majuscules.
+
+    public readonly float $start;
+    public readonly float $end;
+
+
     // TODO étape 2 : `extends Shape`, supprimer la couleur ici, et
     //   appeler `parent::__construct($color)`.
     public function __construct(Point $start, Point $end, string $color = '#000000')
     {
-        throw new \LogicException('À implémenter');
+        $this->Point start = $start;
+        $this->Point end = $end;
+        $this->color = strtoupper($color);
     }
 
     /** TODO : la longueur du segment. Point vous rend déjà ce service. */
     public function length(): float
     {
-        throw new \LogicException('À implémenter');
+        
     }
 }
