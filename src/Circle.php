@@ -15,20 +15,32 @@ namespace Shapes;
  */
 final class Circle extends Shape
 {
+    public readonly point $center;
+    public readonly float $radius;
+    
+
     // TODO : promouvoir `$center` et `$radius` en `public readonly`, valider le rayon.
     public function __construct(Point $center, float $radius, string $color = self::DEFAULT_COLOR)
     {
-        throw new \LogicException('À implémenter');
-    }
+        $this->center  = $center;
+        $this->radius = $radius;
+        parent::__construct($color);
+
+        if($radius <=0){
+            throw new \InvalidArgumentException(
+                'Le rayon doit être strictement positif.'
+            );
+        }
+    }    
 
     public function diameter(): float
     {
-        throw new \LogicException('À implémenter');
+        return ($this->radius*2);
     }
 
     /** TODO : π × r². La constante `M_PI` existe déjà en PHP. */
     public function area(): float
     {
-        throw new \LogicException('À implémenter');
+        return (M_PI * $this->radius**2);
     }
 }

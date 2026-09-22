@@ -17,14 +17,13 @@ namespace Shapes;
  * ÉTAPE 2 — Vous reviendrez ici : `Line` devra hériter de `Shape`, perdre sa
  * propre couleur au profit de celle du parent, et implémenter `area()`.
  */
-final class Line
+final class Line extends Shape
 {
     // TODO étape 1 : promouvoir `$start` et `$end` en `public readonly`, et garder
     //   la couleur dans une `public readonly string $color` validée et en majuscules.
 
-    public readonly point $start;
-    public readonly point $end;
-    public string $color = '#000000';
+    public readonly Point $start;
+    public readonly Point $end;
 
     // TODO étape 2 : `extends Shape`, supprimer la couleur ici, et
     //   appeler `parent::__construct($color)`.
@@ -32,7 +31,11 @@ final class Line
     {
         $this->start  = $start;
         $this->end = $end;
-        $this->color = strtoupper($color);
+        parent::__construct($color);
+    }
+
+    public function area():float{
+        return 0.0;
     }
 
     /** TODO : la longueur du segment. Point vous rend déjà ce service. */
