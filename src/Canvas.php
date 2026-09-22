@@ -25,12 +25,22 @@ final class Canvas
     public private(set) array $shapes = [];
 
     /** TODO : `public readonly string $background;` déclarée ici, remplie par le constructeur. */
+    public readonly string $background;
 
     // TODO : promouvoir `$width` et `$height` en `public readonly`, valider,
     // puis `$this->background = strtoupper($background);`.
-    public function __construct(float $width, float $height, string $background = '#FFFFFF')
+    public function __construct(public readonly float $width, public readonly float $height, string $background = '#FFFFFF')
     {
-        throw new \LogicException('À implémenter');
+        $this->background = strtoupper($background);
+
+        if ($width <= 0 || $height <= 0) {
+            throw new \InvalidArgumentException(
+                'La dimmension doit être strictement positif.'
+            );
+        }
+        if (!preg_match('/^#[0-9A-Fa-f]{6}$/', $background)) {
+            throw new \InvalidArgumentException('La couleur doit être au format hexadécimal #RRGGBB.');
+        }
     }
 
     /**
@@ -41,12 +51,12 @@ final class Canvas
      */
     public function add(Shape $shape): void
     {
-        throw new \LogicException('À implémenter');
+        $this->shapes[] = $shape;
     }
 
     public function isEmpty(): bool
     {
-        throw new \LogicException('À implémenter');
+        return empty($this->shapes);
     }
 
     /**
@@ -57,6 +67,12 @@ final class Canvas
      */
     public function totalArea(): float
     {
-        throw new \LogicException('À implémenter');
+        $total = 0.0;
+
+        foreach ($this->shapes as $shape) {
+            $total += $shape->area();
+        }
+
+        return $total;
     }
 }

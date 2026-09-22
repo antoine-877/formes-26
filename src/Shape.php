@@ -33,6 +33,9 @@ abstract class Shape
     public function __construct(string $color = self::DEFAULT_COLOR)
     {
         $this->color=strtoupper($color);
+        if (!preg_match('/^#[0-9A-Fa-f]{6}$/', $color)) {
+            throw new \InvalidArgumentException('La couleur doit être au format hexadécimal #RRGGBB.');
+        }
     }
 
     /**

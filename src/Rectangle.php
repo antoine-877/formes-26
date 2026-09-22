@@ -15,20 +15,33 @@ namespace Shapes;
  */
 final class Rectangle extends Shape
 {
+    public readonly Point $origin;
+    public readonly float $width;
+    public readonly float $height;
+
+
     // TODO : promouvoir les trois propriétés en `public readonly`, valider les dimensions.
     public function __construct(Point $origin, float $width, float $height, string $color = self::DEFAULT_COLOR)
     {
-        throw new \LogicException('À implémenter');
-    }
+        $this->origin  = $origin;
+        $this->width = $width;
+        $this->height = $height;
+        parent::__construct($color);
+
+        if ($width <= 0 || $height <= 0) {
+            throw new \InvalidArgumentException(
+                'La dimmension doit être strictement positif.'
+            );
+        }}
 
     /** TODO : 2 × (largeur + hauteur). */
     public function perimeter(): float
     {
-        throw new \LogicException('À implémenter');
+        return ($this->width + $this->height)*2;
     }
 
     public function area(): float
     {
-        throw new \LogicException('À implémenter');
+        return ($this->width * $this->height);
     }
 }
