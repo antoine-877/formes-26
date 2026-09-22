@@ -30,10 +30,24 @@ use Shapes\Shape;
 final class SvgRenderer implements Renderer
 {
     // TODO : le constructeur (`private readonly Canvas $canvas`).
+    
+    public function __construct(private Canvas $canvas){}
 
     public function render(): string
     {
-        throw new \LogicException('À implémenter');
+        $shapes = "";
+        foreach($this->canvas->shapes as $shape){
+            $shapes .= $this->renderShape($shape);
+        }
+
+        return <<<SVG
+    <?xml version="1.0" encoding="UTF-8"?>
+        <svg xmlns="http://www.w3.org/2000/svg" width="{$this->canvas->width}"
+        height="{$this->canvas->height}" viewBox="0 0 500 500">
+        <rect x="0" y="0" width="{$this->canvas->width}" height="{$this->canvas->height}" fill="{$this->canvas->background}"/>
+        $shapes
+    </svg>
+    SVG;
     }
 
     /** TODO : créer le dossier s'il n'existe pas, puis `file_put_contents()`. */
