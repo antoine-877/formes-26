@@ -11,11 +11,7 @@ namespace Shapes;
  * Moins de trois sommets, ou un élément qui n'est pas un `Point` :
  * `\InvalidArgumentException`.
  *
- * Les sommets sont exposés en `public readonly array $points` : on lit
- * `$polygon->points`, pas de `points()`. `pointCount()` reste une méthode.
- *
- * Le type `array` de PHP ne dit pas ce qu'il contient : c'est à vous de
- * vérifier, avec `instanceof`.
+ * Les sommets sont exposés en `public readonly array $points`.
  */
 final class Polygon extends Shape
 {
@@ -25,23 +21,45 @@ final class Polygon extends Shape
     /** @param list<Point> $points */
     public function __construct(array $points, string $color = self::DEFAULT_COLOR)
     {
-        throw new \LogicException('À implémenter');
+        parent::__construct($color);
+
+        if (count($points) < 3) {
+            throw new \InvalidArgumentException(
+                'Le polygone doit comporter au moins 3 points.'
+            );
+        }
+
+        foreach ($points as $point) {
+            if (!$point instanceof Point) {
+                throw new \InvalidArgumentException(
+                    'Tous les éléments doivent être des Point.'
+                );
+            }
+        }
+
+        $this->points = $points;
     }
 
     public function pointCount(): int
     {
-        throw new \LogicException('À implémenter');
+        return count($this->points);
     }
 
     /**
-     * TODO : la formule du lacet (shoelace).
-     *
-     * On parcourt les sommets deux par deux, en bouclant du dernier au premier
-     * (`($i + 1) % $count`), on additionne `x_i × y_suivant - x_suivant × y_i`,
-     * et l'aire vaut la valeur absolue de la somme divisée par 2.
+     * Formule du lacet (shoelace).
      */
     public function area(): float
     {
-        throw new \LogicException('À implémenter');
+        $sum = 0.0;
+        $count = $this->pointCount();
+
+        for ($i = 0; $i < $count; $i++) {
+            $next = ($i + 1) % $count;
+
+            $sum += $this->points[$i]->x * $this->points[$next]->y
+                - $this->points[$next]->x * $this->points[$i]->y;
+        }
+
+        return abs($sum) / 2;
     }
 }
