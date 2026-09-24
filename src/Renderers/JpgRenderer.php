@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shapes\Renderers;
 
 use Shapes\Canvas;
+use SVG\SVG;
 
 /**
  * BONUS — La même image, en JPG. Nécessite l'extension GD.
@@ -26,14 +27,52 @@ final class JpgRenderer implements Renderer
     // TODO : le constructeur, le contrôle de `extension_loaded('gd')`,
     // et le SvgRenderer interne.
 
+    private SvgRenderer $svgRenderer;
+
+    public function __construct(
+        private Canvas $canvas,
+        private int $quality = 90
+    ) {
+        if (!extension_loaded('gd')) {
+            throw new \RuntimeException("L'extension GD est requise.");
+        }
+
+        $this->svgRenderer = new SvgRenderer($canvas);
+    }
     /** TODO : rendre les octets du JPG (du binaire, pas du texte lisible). */
     public function render(): string
     {
-        throw new \LogicException('À implémenter');
+        $svg = $this->svgRenderer->render();
+
+        $image = SVG::fromString($svg);
+
+        $rasterImage = $image->toRasterImage(
+            (int) $this->canvas->width,
+            (int) $this->canvas->height,
+            $this->canvas->background
+        );
+
+        if (!$rasterImage instanceof \GdImage) {
+            throw new \RuntimeException(
+                'La rasterisation SVG n’a pas produit une image GD.'
+            );
+        }
+
+        ob_start();
+
+        imagejpeg($rasterImage, null, $this->quality);
+
+        $jpg = ob_get_clean();
+
+        if ($jpg === false) {
+            throw new \RuntimeException('Impossible de générer le JPG.');
+        }
+
+        return $jpg;
     }
 
     public function save(string $path): void
     {
-        throw new \LogicException('À implémenter');
+        file_put_contents($path, $this->render());
     }
 }

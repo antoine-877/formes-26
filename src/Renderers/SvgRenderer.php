@@ -47,7 +47,7 @@ final class SvgRenderer implements Renderer
         return <<<SVG
     <?xml version="1.0" encoding="UTF-8"?>
         <svg xmlns="http://www.w3.org/2000/svg" width="{$this->canvas->width}"
-        height="{$this->canvas->height}" viewBox="0 0 500 300">
+        height="{$this->canvas->height}" viewBox="0 0 {$this->canvas->width} {$this->canvas->height}">
         <rect x="0" y="0" width="{$this->canvas->width}" height="{$this->canvas->height}" fill="{$this->canvas->background}" />
         $shapes
     </svg>
@@ -113,7 +113,7 @@ final class SvgRenderer implements Renderer
             ),
         };
     }
-    
+
     private function getPolygonPoints(Polygon $polygon): string
     {
         $points = '';
