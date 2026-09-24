@@ -6,6 +6,10 @@ namespace Shapes\Renderers;
 
 use Shapes\Canvas;
 use Shapes\Shape;
+use Shapes\Line;
+use Shapes\Circle;
+use Shapes\Rectangle;
+use Shapes\Polygon;
 
 /**
  * ÉTAPE 4 — Transforme un Canvas en document SVG, c'est-à-dire en texte.
@@ -30,21 +34,21 @@ use Shapes\Shape;
 final class SvgRenderer implements Renderer
 {
     // TODO : le constructeur (`private readonly Canvas $canvas`).
-    
-    public function __construct(private Canvas $canvas){}
+
+    public function __construct(private Canvas $canvas) {}
 
     public function render(): string
     {
         $shapes = "";
-        foreach($this->canvas->shapes as $shape){
+        foreach ($this->canvas->shapes as $shape) {
             $shapes .= $this->renderShape($shape);
         }
 
         return <<<SVG
     <?xml version="1.0" encoding="UTF-8"?>
         <svg xmlns="http://www.w3.org/2000/svg" width="{$this->canvas->width}"
-        height="{$this->canvas->height}" viewBox="0 0 500 500">
-        <rect x="0" y="0" width="{$this->canvas->width}" height="{$this->canvas->height}" fill="{$this->canvas->background}"/>
+        height="{$this->canvas->height}" viewBox="0 0 500 300">
+        <rect x="0" y="0" width="{$this->canvas->width}" height="{$this->canvas->height}" fill="{$this->canvas->background}" />
         $shapes
     </svg>
     SVG;
@@ -53,7 +57,13 @@ final class SvgRenderer implements Renderer
     /** TODO : créer le dossier s'il n'existe pas, puis `file_put_contents()`. */
     public function save(string $path): void
     {
-        throw new \LogicException('À implémenter');
+        $directory = dirname($path);
+
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
+        file_put_contents($path, $this->render());
     }
 
     /**
@@ -65,7 +75,54 @@ final class SvgRenderer implements Renderer
      */
     private function renderShape(Shape $shape): string
     {
-        throw new \LogicException('À implémenter');
+        return match (true) {
+            $shape instanceof Line => sprintf(
+                '  <line x1="1" y1="1" x2="1" y2="500" stroke="#0000FF" stroke-width="1" />' . PHP_EOL,
+                $this->number($shape->start->x),
+                $this->number($shape->start->y),
+                $this->number($shape->end->x),
+                $this->number($shape->end->y),
+                $shape->color,
+            ),
+
+            $shape instanceof Circle => sprintf(
+                '  <circle cx="%s" cy="%s" r="%s" fill="%s" />' . PHP_EOL,
+                $this->number($shape->center->x),
+                $this->number($shape->center->y),
+                $this->number($shape->radius),
+                $shape->color
+            ),
+
+            $shape instanceof Rectangle => sprintf(
+                '  <rect x="%s" y="%s" width="%s" height="%s" fill="%s" />' . PHP_EOL,
+                $this->number($shape->origin->x),
+                $this->number($shape->origin->y),
+                $this->number($shape->width),
+                $this->number($shape->height),
+                $shape->color
+            ),
+
+            $shape instanceof Polygon => sprintf(
+                '<polygon points="%s" fill="%s" />' . PHP_EOL,
+                $this->getPolygonPoints($shape),
+                $shape->color,
+            ),
+
+            default => throw new \InvalidArgumentException(
+                'Forme non supportée : ' . $shape::class
+            ),
+        };
+    }
+    
+    private function getPolygonPoints(Polygon $polygon): string
+    {
+        $points = '';
+
+        foreach ($polygon->points as $point) {
+            $points .= $point->x . ',' . $point->y . ' ';
+        }
+
+        return trim($points);
     }
 
     /**
@@ -76,6 +133,9 @@ final class SvgRenderer implements Renderer
      */
     private function number(float $value): string
     {
-        throw new \LogicException('À implémenter');
+        return rtrim(
+            rtrim(number_format($value, 2, '.', ''), '0'),
+            '.'
+        );
     }
 }
